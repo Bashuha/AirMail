@@ -13,8 +13,8 @@ class Settings(BaseSettings):
     # RabbitMQ
     RMQ_HOST: str = "localhost"
     RMQ_PORT: int = 5672
-    RMQ_USER: str
-    RMQ_PASSWORD: str
+    RMQ_USER: str = "aviatx"
+    RMQ_PASSWORD: str = "aviatx"
     RMQ_QUEUE: str = "notifications.service"
     RMQ_EXCHANGE: str = "notify"
     RMQ_ROUTING_KEY: str = "send.messages"

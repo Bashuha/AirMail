@@ -61,7 +61,6 @@ read_optional "RMQ_PORT" "RabbitMQ port"
 read_optional "RMQ_ROUTING_KEY" "Routing key"
 read_optional "RMQ_QUEUE" "Queue name"
 read_optional "RMQ_EXCHANGE" "Exchange name"
-read_optional "DATABASE_URL" "Database URL"
 read_optional "SMTP_HOST" "SMTP host"
 read_optional "SMTP_PORT" "SMTP port"
 

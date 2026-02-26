@@ -1,45 +1,22 @@
 services:
-  rabbitmq:
-    image: rabbitmq:3.13-management
-    container_name: notify-rabbitmq
-    restart: unless-stopped
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RMQ_USER:?RMQ_USER is required}
-      RABBITMQ_DEFAULT_PASS: ${RMQ_PASSWORD:?RMQ_PASSWORD is required}
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
   notify:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: notify-service
+    build: .
+    container_name: notify
     restart: unless-stopped
     environment:
-      RMQ_HOST: ${RMQ_HOST:-rabbitmq}
-      RMQ_PORT: ${RMQ_PORT:-5672}
-      RMQ_USER: ${RMQ_USER:?RMQ_USER is required}
-      RMQ_PASSWORD: ${RMQ_PASSWORD:?RMQ_PASSWORD is required}
-      RMQ_QUEUE: ${RMQ_QUEUE:-notifications.service}
-      RMQ_EXCHANGE: ${RMQ_EXCHANGE:-notify}
-      RMQ_ROUTING_KEY: ${RMQ_ROUTING_KEY:-send.messages}
-      DATABASE_URL: ${DATABASE_URL:-sqlite:////app/data/notifications.db}
-      SMTP_HOST: ${SMTP_HOST:-smtp.yandex.ru}
-      SMTP_PORT: ${SMTP_PORT:-587}
-      SMTP_USER: ${SMTP_USER:?SMTP_USER is required}
-      SMTP_PASSWORD: ${SMTP_PASSWORD:?SMTP_PASSWORD is required}
-      SMTP_FROM: ${SMTP_FROM:?SMTP_FROM is required}
+      - RMQ_HOST=rabbitmq
+      - RMQ_PORT=5672
+      - RMQ_USER
+      - RMQ_PASSWORD
+      - RMQ_ROUTING_KEY
+      - RMQ_QUEUE
+      - RMQ_EXCHANGE
+      - SMTP_USER
+      - SMTP_PASSWORD
+      - SMTP_FROM
     volumes:
       - notify_sqlite_data:/app/data
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - ./logs:/app/logs
 
 volumes:
   notify_sqlite_data:

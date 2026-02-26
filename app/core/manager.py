@@ -1,5 +1,5 @@
-from schemas import Notification
-from services import send_email
+from app.schemas import Notification
+from .services import send_email
 import logging
 
 

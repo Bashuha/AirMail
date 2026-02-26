@@ -4,10 +4,8 @@ import logging
 import pika
 from pika.exchange_type import ExchangeType
 
-from rabbit import RabbitBase
-from core import settings, configure_logging, send_notification
-from schemas import Notification, NotificationResult
-from db.session import init_db
+from app.core import settings, send_notification
+from app.schemas import Notification, NotificationResult
 
 
 if TYPE_CHECKING:
@@ -92,10 +90,3 @@ def consume_messages(channel: "BlockingChannel") -> None:
     )
     log.warning("Waiting for messages...")
     channel.start_consuming()
-
-
-def main():
-    configure_logging(level=logging.WARNING)
-    init_db()
-    with RabbitBase() as rabbit:
-        consume_messages(channel=rabbit.channel)

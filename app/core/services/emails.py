@@ -7,10 +7,9 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-from core import settings
-from schemas import Notification
-from db import Session
-from db.models import Group, Staff, StaffContact
+from app.core import settings
+from app.schemas import Notification
+from app.db import Session, Group, Staff, StaffContact
 
 from sqlalchemy import select
 

@@ -1,63 +1,76 @@
-# Notify Service
+# Калькулятор задач ТО (Calculator Service)
 
-Краткая инструкция по локальному запуску через Docker.
+Микросервис для рассылки сообщений. Работает через RabbitMQ.
 
-## 1) Обязательные переменные окружения
+## Требования
 
-Перед запуском задай переменные в текущей shell-сессии:
+- Docker и Docker Compose
+
+## Запуск
 
 ```bash
-export RMQ_USER="your_rabbit_user"
-export RMQ_PASSWORD="your_rabbit_password"
-export SMTP_USER="your_smtp_user"
-export SMTP_PASSWORD="your_smtp_password"
-export SMTP_FROM="noreply@example.com"
+sudo chmod +x setup.sh
+sudo bash setup.sh
 ```
+После запуска Вам будет предложено ввести переменные окружения.
 
-Опционально (если нужны нестандартные значения):
+В итоге у нас поднимутся два сервиса:
+- **RabbitMQ** (порты 5672) — брокер сообщений
+- **Notify** — сервис уведомлений
 
-```bash
-export RMQ_HOST="rabbitmq"
-export RMQ_PORT="5672"
-export RMQ_QUEUE="notifications.service"
-export RMQ_EXCHANGE="notify"
-export RMQ_ROUTING_KEY="send.messages"
-export DATABASE_URL="sqlite:////app/data/notifications.db"
-export SMTP_HOST="smtp.yandex.ru"
-export SMTP_PORT="587"
-```
+## Обновление сервиса
 
-## 2) Запуск локально
-
-Из корня проекта:
+При наличии изменений в репозитории:
 
 ```bash
+# Получить последние изменения
+git pull
+
+# Пересобрать и перезапустить контейнеры
 docker compose up -d --build
 ```
 
-Логи сервиса:
-
+Если нужно только перезапустить без пересборки:
 ```bash
-docker compose logs -f notify
+docker compose restart
 ```
 
-Остановка:
+## Переменные окружения
 
+| Переменная | Значение по умолчанию |
+|------------|----------------------|
+| `RMQ_HOST` | `rabbitmq` |
+| `RMQ_PORT` | `5672` |
+| `RMQ_USER` | `aviatx` |
+| `RMQ_PASSWORD` | `aviatx` |
+| `RMQ_EXCHANGE` | `notify` |
+| `RMQ_QUEUE` | `notifications.service` |
+| `RMQ_ROUTING_KEY` | `send.messages` |
+| `SMTP_USER` | - |
+| `SMTP_PASSWORD` | - |
+| `SMTP_FROM` | - |
+| `SMTP_PORT` | `587` |
+| `SMTP_HOST` | `smtp.yandex.ru` |
+
+## Логи
+
+Логи сохраняются в директорию `./logs/` (монтируется из контейнера).
+
+## Локальный запуск (без Docker)
+
+1. Установить зависимости:
 ```bash
-docker compose down
+pip install -r requirements.txt
 ```
 
-## 3) Как передавать env без .env на проде
-
-Не создавай `.env` в репозитории. Перед запуском экспортируй переменные в окружение хоста (или CI runner), затем запускай:
-
-```bash
-docker compose up -d
+2. Создать файл `.env` с переменными окружения:
+```env
+SMTP_USER=your_user
+SMTP_PASSWORD=your_pass
+SMTP_FROM=your_sender
 ```
 
-Так переменные подтянутся из окружения процесса `docker compose`.
-
-## Примечание по RabbitMQ
-
-В `docker-compose.yml` уже добавлен контейнер `rabbitmq`, он поднимется автоматически вместе с `notify`.
-`RMQ_USER` и `RMQ_PASSWORD` используются одновременно и для `notify`, и для инициализации RabbitMQ.
+3. Запустить сервис:
+```bash
+python consumer.py
+```
