@@ -17,8 +17,8 @@ class Settings(BaseSettings):
     RMQ_USER: str = "aviatx"
     RMQ_PASSWORD: str = "aviatx"
     RMQ_QUEUE: str = "notifications.service"
-    RMQ_EXCHANGE: str = "notify"
-    RMQ_ROUTING_KEY: str = "send.messages"
+    RMQ_EXCHANGE: str = "aviatx.service"
+    RMQ_ROUTING_KEY: str = "email"
 
     # Database
     DATABASE_URL: str = "sqlite:///./notifications.db"
