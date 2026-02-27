@@ -4,7 +4,8 @@ import logging
 import pika
 from pika.exchange_type import ExchangeType
 
-from app.core import settings, send_notification
+from app.core import send_notification
+from config import settings
 from app.schemas import Notification, NotificationResult
 
 

@@ -19,6 +19,8 @@ class Notification(BaseModel):
     def validate_data(self):
         if not self.recipients and not self.groups:
             raise ValueError("Either recipients or groups must be provided")
+        if not self.body and not self.attachments:
+            raise ValueError("Either attachments or body must be provided")
         return self
 
 

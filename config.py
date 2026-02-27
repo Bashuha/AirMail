@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import logging
 from logging.handlers import RotatingFileHandler
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import pika
 

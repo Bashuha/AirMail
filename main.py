@@ -1,9 +1,12 @@
 import logging
 
-from app.core import configure_logging
+from config import configure_logging
 from app.db import init_db
 from app.rabbit import RabbitBase
 from app.consumer import consume_messages
+
+
+log = logging.getLogger(__name__)
 
 
 def main():
@@ -14,4 +17,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        log.warning("Bye!")

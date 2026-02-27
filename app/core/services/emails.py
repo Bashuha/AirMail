@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-from app.core import settings
+from config import settings
 from app.schemas import Notification
 from app.db import Session, Group, Staff, StaffContact
 

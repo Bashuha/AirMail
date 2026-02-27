@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
-from app.core.config import settings
+from config import settings
 from app.db.models import Base, Group
 
 

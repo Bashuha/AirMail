@@ -1,7 +1,7 @@
 import pika
 from pika.adapters.blocking_connection import BlockingChannel
 
-from app.core import connection_params
+from config import connection_params
 from .exc import RabbitException
 
 
