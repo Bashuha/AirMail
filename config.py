@@ -12,13 +12,13 @@ BASEDIR = Path(__file__).resolve().parent
 
 class Settings(BaseSettings):
     # RabbitMQ
-    RMQ_HOST: str = "localhost"
+    RMQ_HOST: str = "0.0.0.0"
     RMQ_PORT: int = 5672
     RMQ_USER: str = "aviatx"
     RMQ_PASSWORD: str = "aviatx"
     RMQ_QUEUE: str = "notifications.service"
-    RMQ_EXCHANGE: str = "aviatx.service"
-    RMQ_ROUTING_KEY: str = "email"
+    RMQ_EXCHANGE: str = "aviatx.services"
+    RMQ_ROUTING_KEY: str = "notify"
 
     # Database
     DATABASE_URL: str = "sqlite:///./notifications.db"
@@ -30,8 +30,13 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str
     SMTP_FROM: str
 
+    # Zabbix
+    ZABBIX_PORT: int = 10051
+    ZABBIX_URL: str
+    ZABBIX_HOSTNAME: str = "notify"
+
     model_config = SettingsConfigDict(
-        env_file=".env", 
+        env_file=Path.joinpath(BASEDIR, ".dev.env"), 
         env_file_encoding="utf-8",
         extra="ignore"
     )

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 from config import settings
-from app.db.models import Base, Group
+from .models import Base, Group
 
 
 engine = create_engine(

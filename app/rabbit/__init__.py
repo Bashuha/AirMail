@@ -1,7 +1,4 @@
-__all__ = (
-    "RabbitBase",
-    "RabbitException",
-)
-
 from .base import RabbitBase
-from .exc import RabbitException
+from .consumer import consume_messages
+
+__all__ = ["RabbitBase", "consume_messages"]

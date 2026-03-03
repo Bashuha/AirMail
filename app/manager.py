@@ -1,6 +1,7 @@
-from app.schemas import Notification
-from .services import send_email
 import logging
+
+from .schemas import Notification
+from .services import send_email
 
 
 log = logging.getLogger(__name__)

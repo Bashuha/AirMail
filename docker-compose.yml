@@ -8,9 +8,6 @@ services:
       - RMQ_PORT=5672
       - RMQ_USER
       - RMQ_PASSWORD
-      - RMQ_ROUTING_KEY
-      - RMQ_QUEUE
-      - RMQ_EXCHANGE
       - SMTP_USER
       - SMTP_PASSWORD
       - SMTP_FROM

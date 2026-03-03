@@ -2,8 +2,7 @@ import logging
 
 from config import configure_logging
 from app.db import init_db
-from app.rabbit import RabbitBase
-from app.consumer import consume_messages
+from app.rabbit import RabbitBase, consume_messages
 
 
 log = logging.getLogger(__name__)

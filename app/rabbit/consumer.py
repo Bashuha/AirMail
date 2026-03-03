@@ -4,9 +4,10 @@ import logging
 import pika
 from pika.exchange_type import ExchangeType
 
-from app.core import send_notification
-from config import settings
+from app.manager import send_notification
 from app.schemas import Notification, NotificationResult
+from app.monitoring import send_data_to_zabbix, ZabbixItem
+from config import settings
 
 
 if TYPE_CHECKING:
@@ -42,38 +43,26 @@ def process_new_message(
     body: bytes,
 ):
     log.warning("[ ] Start processing message")
-    error_msg = None
-    status: str = "success"
     try:
         notification = Notification.model_validate_json(body)
         send_notification(notification)
-    except Exception as e:
-        log.error(f"Failed to send notification, error: {e}")
-        error_msg = str(e)
-        status = "error"
-
-    result = NotificationResult(
-        status=status,
-        error_message=error_msg
-    )
-    try:
-        send_result(
-            channel=ch,
-            result=result,
-            incoming_properties=properties,
-        )
         ch.basic_ack(delivery_tag=method.delivery_tag)
-        log.warning("[X] Finished processing message")
     except Exception as e:
-        log.error("Error processing message: %s", e, exc_info=True)
-        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
+        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
+        log.error(f"Failed to send notification, error: {e}")
+        send_data_to_zabbix(
+            items=[
+                ZabbixItem(key="notify.error", value=str(e)),
+            ]
+        )
+    log.warning("[X] Finished processing message")
 
 
 def consume_messages(channel: "BlockingChannel") -> None:
     channel.basic_qos(prefetch_count=1)
     channel.exchange_declare(
         exchange=settings.RMQ_EXCHANGE,
-        exchange_type=ExchangeType.topic,
+        exchange_type=ExchangeType.direct,
         durable=True,
     )
     channel.queue_declare(
