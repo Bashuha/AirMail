@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING
 import logging
 
-import pika
 from pika.exchange_type import ExchangeType
 
 from app.manager import send_notification
-from app.schemas import Notification, NotificationResult
+from app.schemas import Notification
 from app.monitoring import send_data_to_zabbix, ZabbixItem
 from config import settings
 
@@ -16,24 +15,6 @@ if TYPE_CHECKING:
 
 
 log = logging.getLogger(__name__)
-
-
-def send_result(
-    channel: "BlockingChannel",
-    result: NotificationResult,
-    incoming_properties: "BasicProperties"
-):
-    channel.basic_publish(
-        exchange="",
-        routing_key=incoming_properties.reply_to,
-        properties=pika.BasicProperties(
-            correlation_id=incoming_properties.correlation_id,
-            delivery_mode=2,
-            content_type="application/json"
-        ),
-        body=result.model_dump_json().encode()
-    )
-    log.warning(f"Result sent to {incoming_properties.reply_to}")
 
 
 def process_new_message(

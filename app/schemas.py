@@ -1,10 +1,10 @@
 from pydantic import BaseModel, Field, model_validator
-from typing import List, Optional
+from typing import List
 
 
-class AttachmentSchema(BaseModel):
+class Attachment(BaseModel):
+    url: str
     filename: str
-    content: bytes
 
 
 class Notification(BaseModel):
@@ -13,17 +13,10 @@ class Notification(BaseModel):
     groups: List[str] = Field(default_factory=list)
     subject: str = "Notification"
     body: str
-    attachments: List[AttachmentSchema] = Field(default_factory=list)
+    attachments: List[Attachment] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_data(self):
         if not self.recipients and not self.groups:
             raise ValueError("Either recipients or groups must be provided")
-        if not self.body and not self.attachments:
-            raise ValueError("Either attachments or body must be provided")
         return self
-
-
-class NotificationResult(BaseModel):
-    status: str = "success"
-    error_message: Optional[str] = None
