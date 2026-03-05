@@ -10,6 +10,7 @@ services:
       - SMTP_USER
       - SMTP_PASSWORD
       - SMTP_FROM
+      - ZABBIX_URL
     volumes:
       - notify_sqlite_data:/app/data
       - ./logs:/app/logs

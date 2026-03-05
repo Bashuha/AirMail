@@ -45,6 +45,13 @@ while [ -z "$smtp_from" ]; do
 done
 echo "SMTP_FROM=$smtp_from" >> .env
 
+# 4. Mandatory Zabbix field
+zabbix_url=""
+while [ -z "$zabbix_url" ]; do
+    read -p "Enter Zabbix URL (mandatory): " zabbix_url
+done
+echo "ZABBIX_URL=$zabbix_url" >> .env
+
 echo -e "\n${GREEN}.env file created.${NC}"
 
 # 5. Start containers

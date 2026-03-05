@@ -49,6 +49,7 @@ docker compose restart
 | `SMTP_USER` | — | Пользователь SMTP (обязательно) |
 | `SMTP_PASSWORD` | — | Пароль SMTP (обязательно) |
 | `SMTP_FROM` | — | Email отправителя (обязательно) |
+| `ZABBIX_URL` | — | URL Zabbix сервера (обязательно) |
 
 ## Логи
 
