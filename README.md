@@ -1,4 +1,4 @@
-# Калькулятор задач ТО (Calculator Service)
+# Notification Service
 
 Микросервис для рассылки сообщений. Работает через RabbitMQ.
 
