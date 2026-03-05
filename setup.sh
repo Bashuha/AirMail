@@ -45,25 +45,6 @@ while [ -z "$smtp_from" ]; do
 done
 echo "SMTP_FROM=$smtp_from" >> .env
 
-# Function for optional fields (does not write to file if empty)
-read_optional() {
-    local var_name=$1
-    local prompt_text=$2
-    read -p "$prompt_text (skip for default): " input
-    if [ ! -z "$input" ]; then
-        echo "$var_name=$input" >> .env
-    fi
-}
-
-# 4. Optional fields
-read_optional "RMQ_HOST" "RabbitMQ host"
-read_optional "RMQ_PORT" "RabbitMQ port"
-read_optional "RMQ_ROUTING_KEY" "Routing key"
-read_optional "RMQ_QUEUE" "Queue name"
-read_optional "RMQ_EXCHANGE" "Exchange name"
-read_optional "SMTP_HOST" "SMTP host"
-read_optional "SMTP_PORT" "SMTP port"
-
 echo -e "\n${GREEN}.env file created.${NC}"
 
 # 5. Start containers

@@ -14,9 +14,7 @@ sudo bash setup.sh
 ```
 После запуска Вам будет предложено ввести переменные окружения.
 
-В итоге у нас поднимутся два сервиса:
-- **RabbitMQ** (порты 5672) — брокер сообщений
-- **Notify** — сервис уведомлений
+Сервис подключится к существующему RabbitMQ в сети `aviatx-net`.
 
 ## Обновление сервиса
 
@@ -37,20 +35,20 @@ docker compose restart
 
 ## Переменные окружения
 
-| Переменная | Значение по умолчанию |
-|------------|----------------------|
-| `RMQ_HOST` | `rabbitmq` |
-| `RMQ_PORT` | `5672` |
-| `RMQ_USER` | `aviatx` |
-| `RMQ_PASSWORD` | `aviatx` |
-| `RMQ_EXCHANGE` | `notify` |
-| `RMQ_QUEUE` | `notifications.service` |
-| `RMQ_ROUTING_KEY` | `send.messages` |
-| `SMTP_USER` | - |
-| `SMTP_PASSWORD` | - |
-| `SMTP_FROM` | - |
-| `SMTP_PORT` | `587` |
-| `SMTP_HOST` | `smtp.yandex.ru` |
+| Переменная | Значение по умолчанию | Описание |
+|------------|----------------------|----------|
+| `RMQ_HOST` | `rabbitmq` | Хост RabbitMQ (в Docker) |
+| `RMQ_PORT` | `5672` | Порт RabbitMQ |
+| `RMQ_USER` | `aviatx` | Пользователь RabbitMQ |
+| `RMQ_PASSWORD` | `aviatx` | Пароль RabbitMQ |
+| `RMQ_EXCHANGE` | `aviatx.services` | Exchange для сообщений |
+| `RMQ_QUEUE` | `notifications.service` | Очередь |
+| `RMQ_ROUTING_KEY` | `notify` | Routing key |
+| `SMTP_HOST` | `smtp.yandex.ru` | SMTP сервер |
+| `SMTP_PORT` | `587` | Порт SMTP |
+| `SMTP_USER` | — | Пользователь SMTP (обязательно) |
+| `SMTP_PASSWORD` | — | Пароль SMTP (обязательно) |
+| `SMTP_FROM` | — | Email отправителя (обязательно) |
 
 ## Логи
 
