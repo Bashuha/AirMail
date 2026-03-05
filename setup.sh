@@ -56,7 +56,7 @@ echo -e "\n${GREEN}.env file created.${NC}"
 
 # 5. Start containers
 echo -e "${YELLOW}Starting containers...${NC}"
-docker compose up -d --build
+# docker compose up -d --build
 
 # 6. Check status
 sleep 3
