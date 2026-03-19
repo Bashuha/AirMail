@@ -48,7 +48,8 @@ def send_email(notification: Notification) -> bool:
             msg['To'] = recipient
             msg['Subject'] = notification.subject
 
-            msg.attach(MIMEText(notification.body, 'plain'))
+            content_type = 'html' if notification.is_html else 'plain'
+            msg.attach(MIMEText(notification.body, content_type))
 
             for attachment in notification.attachments:
                 part = MIMEBase('application', 'octet-stream')

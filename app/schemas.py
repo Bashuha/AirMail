@@ -13,6 +13,7 @@ class Notification(BaseModel):
     groups: List[str] = Field(default_factory=list)
     subject: str = "Notification"
     body: str
+    is_html: bool = False
     attachments: List[Attachment] = Field(default_factory=list)
 
     @model_validator(mode="after")
