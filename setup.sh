@@ -52,12 +52,16 @@ while [ -z "$zabbix_url" ]; do
 done
 echo "ZABBIX_URL=$zabbix_url" >> .env
 
+# 5. Mandatory Zabbix field
+zabbix_hostname="notify"
+echo "ZABBIX_HOSTNAME=$zabbix_hostname" >> .env
+
 echo -e "\n${GREEN}.env file created.${NC}"
 
-# 5. Start containers
+# 6. Start containers
 echo -e "${YELLOW}Starting containers...${NC}"
 docker compose up -d --build
 
-# 6. Check status
+# 7. Check status
 sleep 3
 docker compose ps

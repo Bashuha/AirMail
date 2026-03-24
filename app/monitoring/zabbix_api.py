@@ -10,6 +10,10 @@ from config import settings
 ZabbixItem = namedtuple("ZabbixItem", ["key", "value"])
 
 
+class ZabbixKey:
+    SEND_ERROR = "notify.send.error"
+
+
 def send_data_to_zabbix(items: List[ZabbixItem]) -> None:
     data = [
         ItemValue(

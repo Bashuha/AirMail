@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     # Zabbix
     ZABBIX_PORT: int = 10051
     ZABBIX_URL: str
-    ZABBIX_HOSTNAME: str = "notify"
+    ZABBIX_HOSTNAME: str = "notify_local"
 
     model_config = SettingsConfigDict(
         env_file=Path.joinpath(BASEDIR, ".dev.env"), 

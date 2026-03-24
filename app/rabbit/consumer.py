@@ -4,6 +4,7 @@ import logging
 from pika.exchange_type import ExchangeType
 
 from app.manager import send_notification
+from app.monitoring import ZabbixKey
 from app.schemas import Notification
 from app.monitoring import send_data_to_zabbix, ZabbixItem
 from config import settings
@@ -33,7 +34,7 @@ def process_new_message(
         log.error(f"Failed to send notification, error: {e}")
         send_data_to_zabbix(
             items=[
-                ZabbixItem(key="notify.error", value=str(e)),
+                ZabbixItem(key=ZabbixKey.SEND_ERROR, value=str(e)),
             ]
         )
     log.warning("[X] Finished processing message")
