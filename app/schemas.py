@@ -3,7 +3,7 @@ from typing import List
 
 
 class Attachment(BaseModel):
-    url: str
+    content: bytes
     filename: str
 
 
