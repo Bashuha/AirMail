@@ -8,6 +8,8 @@ import pika
 
 
 BASEDIR = Path(__file__).resolve().parent
+DATA_DIR = BASEDIR.joinpath("data")
+DATA_DIR.mkdir(exist_ok=True)
 
 
 class Settings(BaseSettings):
@@ -21,7 +23,7 @@ class Settings(BaseSettings):
     RMQ_ROUTING_KEY: str = "notify"
 
     # Database
-    DATABASE_URL: str = "sqlite:///./notifications.db"
+    DATABASE_URL: str = f"sqlite:///{DATA_DIR.joinpath('notifications.db')}"
     
     # SMTP (Email)
     SMTP_HOST: str = "smtp.yandex.ru"
@@ -30,13 +32,16 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str
     SMTP_FROM: str
 
+    # Service
+    DEBUG: bool = True
+
     # Zabbix
     ZABBIX_PORT: int = 10051
     ZABBIX_URL: str
     ZABBIX_HOSTNAME: str = "notify_local"
 
     model_config = SettingsConfigDict(
-        env_file=Path.joinpath(BASEDIR, ".dev.env"), 
+        env_file=BASEDIR.joinpath(".dev.env"), 
         env_file_encoding="utf-8",
         extra="ignore"
     )
@@ -51,7 +56,7 @@ connection_params = pika.ConnectionParameters(
 
 
 def configure_logging(level = logging.INFO):
-    logs_dir = BASEDIR / "logs"
+    logs_dir = BASEDIR.joinpath("logs")
     logs_dir.mkdir(exist_ok=True)
     
     log_format = "[%(asctime)s.%(msecs)03d] - %(message)s"
@@ -63,7 +68,7 @@ def configure_logging(level = logging.INFO):
         format=log_format,
     )
     
-    log_file = logs_dir / "unexpected_errors.log"
+    log_file = logs_dir.joinpath("unexpected_errors.log")
     file_handler = RotatingFileHandler(
         log_file,
         maxBytes=2 * 1024 * 1024,  # 2 MB

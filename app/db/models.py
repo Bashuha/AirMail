@@ -1,8 +1,16 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Table
+import enum
+
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Table, Enum
 from sqlalchemy.orm import relationship, declarative_base
 
 
 Base = declarative_base()
+
+
+class ContactType(enum.Enum):
+    EMAIL = "email"
+    TELEGRAM = "telegram"
+    OTHER = "other"
 
 
 staff_group = Table(
@@ -30,6 +38,7 @@ class StaffContact(Base):
     id = Column(Integer, primary_key=True)
     staff_id = Column(Integer, ForeignKey('staff.id', ondelete="CASCADE"))
     value = Column(String, nullable=False) # 'admin@mail.ru'
+    type = Column(Enum(ContactType), nullable=False, default=ContactType.EMAIL)
 
     owner = relationship("Staff", back_populates="contacts")
 

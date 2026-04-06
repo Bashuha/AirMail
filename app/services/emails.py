@@ -30,6 +30,10 @@ def get_recipients_from_groups(groups: List[str]):
 
 
 def prepare_data_for_mail(notification: Notification):
+    if settings.DEBUG:
+        log.warning("DEBUG mode: redirecting all recipients to 'admins' group")
+        return get_recipients_from_groups(["admins"])
+
     recipients = notification.recipients
     if groups := notification.groups:
         recipients.extend(get_recipients_from_groups(groups))
@@ -49,7 +53,7 @@ def send_email(notification: Notification) -> bool:
             msg['Subject'] = notification.subject
 
             content_type = 'html' if notification.is_html else 'plain'
-            msg.attach(MIMEText(notification.body, content_type))
+            msg.attach(MIMEText(notification.body, content_type, 'utf-8'))
 
             for attachment in notification.attachments:
                 part = MIMEBase('application', 'octet-stream')
