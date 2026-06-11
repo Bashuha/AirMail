@@ -32,7 +32,10 @@ def get_recipients_from_groups(groups: List[str]):
 def prepare_data_for_mail(notification: Notification):
     if settings.DEBUG:
         log.warning("DEBUG mode: redirecting all recipients to 'admins' group")
-        return get_recipients_from_groups(["admins"])
+        admins = set(get_recipients_from_groups(["admins"]))
+        if set(notification.recipients).issubset(admins):
+            return notification.recipients
+        return admins
 
     recipients = notification.recipients
     if groups := notification.groups:
