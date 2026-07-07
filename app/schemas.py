@@ -1,9 +1,9 @@
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, Base64Bytes
 from typing import List
 
 
 class Attachment(BaseModel):
-    content: bytes
+    content: Base64Bytes
     filename: str
 
 
