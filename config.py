@@ -26,11 +26,13 @@ class Settings(BaseSettings):
     DATABASE_URL: str = f"sqlite:///{DATA_DIR.joinpath('notifications.db')}"
     
     # SMTP (Email)
-    SMTP_HOST: str = "smtp.yandex.ru"
-    SMTP_PORT: int = 587
+    SMTP_HOST: str = "smtp.mail.selcloud.ru"
+    SMTP_PORT: int = 1127
     SMTP_USER: str
     SMTP_PASSWORD: str
     SMTP_FROM: str
+    EMAIL_USE_TLS: bool = False
+    EMAIL_USE_SSL: bool = True
 
     # Service
     DEBUG: bool = True
@@ -41,7 +43,7 @@ class Settings(BaseSettings):
     ZABBIX_HOSTNAME: str = "notify_local"
 
     model_config = SettingsConfigDict(
-        env_file=BASEDIR.joinpath(".dev.env"), 
+        env_file=BASEDIR.joinpath(".env"), 
         env_file_encoding="utf-8",
         extra="ignore"
     )

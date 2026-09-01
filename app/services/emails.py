@@ -1,5 +1,6 @@
 import logging
 import smtplib
+import ssl
 from typing import List
 
 from email.mime.multipart import MIMEMultipart
@@ -45,8 +46,17 @@ def prepare_data_for_mail(notification: Notification):
 
 def send_email(notification: Notification) -> bool:
     recipients = prepare_data_for_mail(notification)
-    with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
-        server.starttls()
+    if settings.EMAIL_USE_SSL and settings.EMAIL_USE_TLS:
+        raise ValueError("EMAIL_USE_SSL and EMAIL_USE_TLS cannot both be True")
+
+    if settings.EMAIL_USE_SSL:
+        server_factory = smtplib.SMTP_SSL
+    else:
+        server_factory = smtplib.SMTP
+
+    with server_factory(settings.SMTP_HOST, settings.SMTP_PORT) as server:
+        if settings.EMAIL_USE_TLS:
+            server.starttls(context=ssl.create_default_context())
         server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
 
         for recipient in recipients:
