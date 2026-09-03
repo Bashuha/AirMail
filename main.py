@@ -2,6 +2,7 @@ import logging
 
 from config import configure_logging, settings
 from app.db import init_db
+from app.monitoring import start_heartbeat
 from app.rabbit import RabbitBase, consume_messages
 
 
@@ -14,6 +15,8 @@ def main():
 
     if settings.DEBUG:
         log.warning("Running in DEBUG mode — all emails will be redirected to 'admin' group")
+
+    start_heartbeat()
 
     with RabbitBase() as rabbit:
         consume_messages(channel=rabbit.channel)
